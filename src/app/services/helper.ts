@@ -1,2 +1,2 @@
-let baserUrl = 'https://backend-2024-portal-alumn-production.up.railway.app'
+let baserUrl = 'http://localhost:8080'
 export default baserUrl;

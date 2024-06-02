@@ -22,7 +22,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ActualizarExamenComponent } from './pages/admin/actualizar-examen/actualizar-examen.component';
 
 const routes: Routes = [
- 
+// 
   {
     path : 'signup',
     component : SignupComponent,
@@ -42,10 +42,7 @@ const routes: Routes = [
         path:'profile',
         component:ProfileComponent
       },
-      {
-        path : '',
-        component : WelcomeComponent
-      },
+    
       {
         path:'categorias',
         component:ViewCategoriasComponent

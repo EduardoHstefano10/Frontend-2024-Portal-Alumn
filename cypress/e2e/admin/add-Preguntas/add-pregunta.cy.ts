@@ -3,7 +3,7 @@ describe('Admin Panel', () => {
         cy.visit('http://localhost:4200');
     });
 
-    it('Debe permitir agregar una nueva pregunta a un examen existente', () => {
+    it('Debe permitir actualizar una pregunta existente en un examen', () => {
         // Ingresar credenciales válidas
         cy.get('input[name="username"]').type('ehernandez');
         cy.get('input[name="password"]').type('123');
@@ -25,29 +25,36 @@ describe('Admin Panel', () => {
             cy.contains('Preguntas').should('be.visible').click();
         });
 
-    
-        // Hacer clic en "Agregar pregunta"
-        cy.contains('Agregar pregunta').should('be.visible').click();
-
-        // Ingresar datos en el formulario de pregunta
-        cy.get('textarea[name="contenido"]').type('¿Cuál es la capital de Francia?');
-        cy.get('input[name="opcion1"]').type('París');
-        cy.get('input[name="opcion2"]').type('Londres');
-        cy.get('input[name="opcion3"]').type('Berlín');
-        cy.get('input[name="opcion4"]').type('Madrid');
-
-        // Seleccionar la respuesta correcta
-        cy.get('mat-select[name="respuesta"]').click().then(() => {
-            cy.get('mat-option').contains('París').click();
+        // Seleccionar una pregunta específica para actualizar
+        cy.contains('¿Cuál es la capital de Francia?').parents('mat-card').within(() => {
+            cy.contains('Editar').should('be.visible').click();
         });
 
-        // Enviar el formulario
+        // Esperar a que el formulario de edición de pregunta se cargue
+        cy.get('form').should('be.visible');
+
+        // Actualizar los datos de la pregunta
+        cy.get('textarea[name="contenido"]').clear().type('¿Cuál es la capital de España?');
+        cy.get('input[name="opcion1"]').clear().type('Madrid');
+        cy.get('input[name="opcion2"]').clear().type('Barcelona');
+        cy.get('input[name="opcion3"]').clear().type('Sevilla');
+        cy.get('input[name="opcion4"]').clear().type('Valencia');
+
+        // Seleccionar la nueva respuesta correcta
+        cy.get('mat-select[name="respuesta"]').click().then(() => {
+            cy.get('mat-option').contains('Madrid').click();
+        });
+
+        // Enviar el formulario de actualización
         cy.get('button[type="submit"]').click();
 
         // Esperar que aparezca el SweetAlert2 y hacer clic en el botón "OK"
         cy.get('button.swal2-confirm').should('be.visible').click();
 
- // Navegar a la página de exámenes
- cy.visit('http://localhost:4200/admin/examenes');
+        // Verificar que la actualización de la pregunta fue exitosa
+        cy.contains('Pregunta actualizada exitosamente').should('be.visible');
+
+        // Navegar de nuevo a la página de exámenes
+        cy.visit('http://localhost:4200/admin/examenes');
     });
 });
